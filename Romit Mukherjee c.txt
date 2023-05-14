@@ -1,0 +1,102 @@
+#include <stdio.h>
+
+char board[3][3]; // The Tic-Tac-Toe board
+
+// Function to initialize the board with empty spaces
+void initializeBoard() {
+    int i, j;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            board[i][j] = ' ';
+        }
+    }
+}
+
+// Function to print the current board
+void printBoard() {
+    int i;
+    printf("-------------\n");
+    for (i = 0; i < 3; i++) {
+        printf("| %c | %c | %c |\n", board[i][0], board[i][1], board[i][2]);
+        printf("-------------\n");
+    }
+}
+
+// Function to check if a player has won
+int checkWin(char player) {
+    int i;
+    
+    // Check rows
+    for (i = 0; i < 3; i++) {
+        if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+            return 1;
+        }
+    }
+    
+   // Check columns
+    for (i = 0; i < 3; i++) {
+        if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
+            return 1;
+        }
+    }
+    
+    // Check diagonals
+    if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+        return 1;
+    }
+    if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+        return 1;
+    }
+    
+    return 0;
+}
+
+// Function to make a move for a player
+void makeMove(char player) {
+    int row, col;
+    
+    printf("Player %c's turn\n", player);
+    
+    // Get row and column input from the player
+    printf("Enter row (0-2): ");
+    scanf("%d", &row);
+    printf("Enter column (0-2): ");
+    scanf("%d", &col);
+    
+    // Validate the input
+    if (row < 0 || row > 2 || col < 0 || col > 2 || board[row][col] != ' ') {
+        printf("Invalid move! Try again.\n");
+        makeMove(player);
+        return;
+    }
+    
+    
+    // Make the move
+    board[row][col] = player;
+}
+
+int main() {
+    char player = 'X';
+    int moves = 0;
+    
+    initializeBoard();
+    
+    while (1) {
+        printBoard();
+        makeMove(player);
+        moves++;
+        
+        if (checkWin(player)) {
+            printf("Player %c wins!\n", player);
+            break;
+        } else if (moves == 9) {
+            printf("It's a draw!\n");
+            break;
+        }
+        
+        // Switch players
+        player = (player == 'X') ? 'O' : 'X';
+    }
+    
+    return 0;
+}
